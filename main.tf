@@ -76,6 +76,12 @@ resource "aws_elasticsearch_domain" "es" {
     volume_size = "${var.volume_size}"
   }
 
+  log_options {
+      cloudwatch_log_group_arn = "${var.cloudwatch_log_group_arn}"
+      log_type                 = "${var.log_type}"
+      enabled                  = true
+  }
+
   snapshot_options {
     automated_snapshot_start_hour = "${var.snapshot_start}"
   }
