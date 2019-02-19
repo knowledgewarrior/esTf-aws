@@ -59,8 +59,6 @@ resource "aws_elasticsearch_domain" "es" {
 
   access_policies = "${var.access_policies}"
 
-  log_options = "${var.log_options}"
-
   vpc_options {
     security_group_ids = ["${aws_security_group.elasticsearch.id}"]
     subnet_ids         = ["${var.subnet_ids}"]
@@ -87,7 +85,7 @@ resource "aws_elasticsearch_domain" "es" {
   }
 }
 
-# Add ALB record on DNS
+# Add record on DNS
 resource "aws_route53_record" "main" {
   zone_id = "${var.zone_id}"
   name    = "${var.name}"
@@ -95,4 +93,14 @@ resource "aws_route53_record" "main" {
   ttl     = "300"
 
   records = ["${aws_elasticsearch_domain.es.endpoint}"]
+}
+
+# Add CloudWatch logging
+resource "aws_cloudwatch_log_group" "jmf-es-log-group" {
+  name = "${var.name}"
+}
+
+resource "aws_cloudwatch_log_stream" "jmf-es-stream" {
+  name           = "${var.name}"
+  log_group_name = "${aws_cloudwatch_log_group.jmf-es-log-group.name}"
 }
