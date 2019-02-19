@@ -59,6 +59,8 @@ resource "aws_elasticsearch_domain" "es" {
 
   access_policies = "${var.access_policies}"
 
+  log_options = "${var.log_options}"
+
   vpc_options {
     security_group_ids = ["${aws_security_group.elasticsearch.id}"]
     subnet_ids         = ["${var.subnet_ids}"]
@@ -74,12 +76,6 @@ resource "aws_elasticsearch_domain" "es" {
     ebs_enabled = true
     volume_type = "${var.volume_type}"
     volume_size = "${var.volume_size}"
-  }
-
-  log_options {
-      cloudwatch_log_group_arn = "${var.cloudwatch_log_group_arn}"
-      log_type                 = "${var.log_type}"
-      enabled                  = true
   }
 
   snapshot_options {
